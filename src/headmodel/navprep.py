@@ -50,6 +50,8 @@ MARGIN = 5                # voxels around the head box, as both training sets we
 # nnU-Net classes -> charm labels: dataset.CLASS_TO_CHARM.
 # input checks (PLAN 10.2 item 3); warnings only, the clinician sees them with the provisional result
 THICK_MM = 2.5
+EDGE_AREA = 0.2           # head area in the input's outermost slice / its largest cross-section; above = head cut
+                          # (validation heads <= 0.06; a 6 mm axial series cut through the vertex: about 0.3)
 
 
 class InputError(ValueError):
@@ -161,22 +163,47 @@ def mr_to_charm(classes: np.ndarray) -> np.ndarray:
 
 # ------------------------------------------------------------------------------------------ checks
 
+def edge_area(src: nib.Nifti1Image) -> dict:
+    """Per face of the input's own voxel grid (LPS): head area in the outermost slice / the head's largest
+    cross-section along that axis. On a thick-slice series the conformed grid fades out over the last slab, so the
+    head can stop short of the conformed edge although the scan cut it; the input's
+    own outermost slice shows the cut. Faces with no head are left out; {} for an empty image."""
+    img = to_lps(src)
+    v = np.asanyarray(img.dataobj).astype(np.float32)
+    if v.ndim > 3:
+        v = v.reshape(v.shape[:3] + (-1,))[..., 0]
+    try:
+        head = mr_head_mask(v)
+    except InputError:
+        return {}
+    out = {}
+    for ax, (lo, hi) in enumerate((("right", "left"), ("front", "back"), ("bottom", "top"))):
+        area = head.sum(axis=tuple(i for i in range(3) if i != ax)).astype(float)
+        if area.max() > 0:
+            for k, a in ((lo, area[0]), (hi, area[-1])):
+                if a > 0:
+                    out[k] = round(float(a / area.max()), 3)
+    return out
+
+
 def input_checks(src: nib.Nifti1Image, head: np.ndarray, modality: str) -> dict:
     """Warnings for the clinician (PLAN 10.2 item 3): slice thickness and a head cut by the image edge.
     `head` is on the conformed LPS grid, so its faces are named: L/R, P/A (front = low index on P),
-    I/S."""
+    I/S. MRI: a face is also cut when the input's own outermost slice holds more than EDGE_AREA of the head's
+    largest cross-section (edge_area). The bottom is not warned about: the neck is normally cut."""
     zooms = [float(z) for z in src.header.get_zooms()[:3]]
     faces = {"right": head[0], "left": head[-1], "front": head[:, 0], "back": head[:, -1],
              "bottom": head[:, :, 0], "top": head[:, :, -1]}
     cut = {k: int(v.sum()) for k, v in faces.items() if v.sum() > 0}
+    area = edge_area(src) if modality == "mr" else {}
     warnings = []
     if max(zooms) > THICK_MM:
         warnings.append(f"slices {max(zooms):.1f} mm thick (> {THICK_MM} mm): targets less certain")
     for k in ("top", "front", "left", "right", "back"):
-        if k in cut:
+        if k in cut or area.get(k, 0.0) > EDGE_AREA:
             warnings.append(f"head touches the image edge ({k}): check coverage of nearby targets")
     return {"modality": modality, "voxel_mm": zooms, "shape": [int(n) for n in src.shape[:3]],
-            "head_on_edge_voxels": cut, "warnings": warnings}
+            "head_on_edge_voxels": cut, "edge_area_ratio": area, "warnings": warnings}
 
 
 # ------------------------------------------------------------------------------------------ stage 0

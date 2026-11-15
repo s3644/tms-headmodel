@@ -84,6 +84,27 @@ def test_input_checks_warn_on_thick_slices_and_a_cut_head():
     assert ok["warnings"] == [] and ok["head_on_edge_voxels"] == {}
 
 
+def _ball(cut_top: bool) -> nib.Nifti1Image:
+    """A 'head' (ball, radius 30 mm) in 6 mm axial slices from z = -45 to 45; cut_top: the ball's centre at z = 25,
+    so the top slice (z = 45) runs 20 mm above it (about half its cross-section); else centred at z = -5 (inside)."""
+    x, y, z = np.mgrid[-40:41, -40:41, -45:46:6].astype(float)
+    zc = 25.0 if cut_top else -5.0
+    vol = (x ** 2 + y ** 2 + (z - zc) ** 2 <= 30 ** 2).astype(np.float32) * 100
+    return nib.Nifti1Image(vol, np.diag([-1.0, -1.0, 6.0, 1.0]))   # RAS-ish axes, flipped to LPS by to_lps
+
+
+def test_input_checks_see_a_thick_slice_cut_that_the_conformed_grid_hides():
+    whole, cut = _ball(False), _ball(True)
+    hidden = np.zeros((81, 81, 91), bool)
+    hidden[20:60, 20:60, 10:80] = True                  # conformed head stops short of every face
+    ok = navprep.input_checks(whole, hidden, "mr")
+    assert ok["head_on_edge_voxels"] == {} and not any("edge" in w for w in ok["warnings"])
+    assert ok["edge_area_ratio"].get("top", 0.0) <= navprep.EDGE_AREA
+    bad = navprep.input_checks(cut, hidden, "mr")
+    assert bad["edge_area_ratio"]["top"] > navprep.EDGE_AREA
+    assert any("(top)" in w for w in bad["warnings"])
+
+
 def test_surface_gii_adds_c_ras(tmp_path):
     v = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]], np.float32)
     f = np.array([[0, 1, 2]], np.int32)
