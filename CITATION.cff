@@ -7,11 +7,11 @@ authors:
     orcid: "https://orcid.org/0009-0001-9170-426X"
 license: GPL-3.0-only
 repository-code: "https://github.com/s3644/tms-headmodel"
-version: "0.1.1"
+version: "0.1.2"
 identifiers:
   - type: doi
-    value: 10.5281/zenodo.24215664
-    description: "R5 trained model files (Zenodo, CC BY-NC 4.0)"
+    value: 10.5281/zenodo.24215663
+    description: "R5 trained model files, all versions (Zenodo, CC BY-NC 4.0)"
 preferred-citation:
   type: article
   title: "TMS targets in about a minute from routine clinical MRI: a GPU head-model route checked against SimNIBS charm on 1 mm and 5 mm scans"
@@ -19,6 +19,6 @@ preferred-citation:
     - family-names: Jitpimolmard
       given-names: Jukrapope
       orcid: "https://orcid.org/0009-0001-9170-426X"
-  doi: 10.5281/zenodo.24215660
+  doi: 10.5281/zenodo.24215659
   year: 2026
   notes: "Preprint, Zenodo"

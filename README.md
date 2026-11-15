@@ -38,7 +38,8 @@ With another layout (e.g. conda), point it at their interpreters:
     export HM_NAVPREP_WARP_PY=/path/to/rtms-gpu/bin/python
 
 The model files (R5: five nnU-Net folds, the warp network and the label template) are on Zenodo:
-**doi:10.5281/zenodo.24215664** (CC BY-NC 4.0). Unpack them into the repository root, keeping the code's GPL
+**doi:10.5281/zenodo.24215663** (all versions; CC BY-NC 4.0). The latest version only corrects the model card; the
+model files are the same in every version. Unpack them into the repository root, keeping the code's GPL
 `LICENSE` in place (the model licence is saved as `LICENSE-MODEL`), and check them:
 
     unzip r5-model.zip -x LICENSE
@@ -102,4 +103,4 @@ No images are distributed here. Training and test data:
 
 ## Citation
 
-See `CITATION.cff`. Preprint: Jitpimolmard J. TMS targets in about a minute from routine clinical MRI. Zenodo, 2026. doi:10.5281/zenodo.24215660.
+See `CITATION.cff`. Preprint: Jitpimolmard J. TMS targets in about a minute from routine clinical MRI. Zenodo, 2026. doi:10.5281/zenodo.24215659 (all versions).
