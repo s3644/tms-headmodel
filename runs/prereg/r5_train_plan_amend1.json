@@ -1,0 +1,7 @@
+{
+ "what": "Amendment 1 to r5_train_plan (sha 6aadb964...), sealed 2026-11-02 before any R5 training started (the chain is still waiting for the IXI charm queue; no R5 model or result exists).",
+ "why": "User 2026-11-02: the clinic will use mixed inputs: 1 mm 3D T1 for new patients (depression, OCD, anxiety) and existing 5 mm T1s (stroke patients especially). Clinical 2D thick-slice T1s usually have a gap between slices, which the sealed augmentation did not model.",
+ "change": "ThickSliceTransform: slab thickness k ~ U[2,6] voxels as before; spacing k + gap, gap = 0 with probability 0.5, else U[0, 0.3]*k; linear interpolation between slab centres back to the patch (headmodel/nnunet_r5.py thick_slices). Probability p=0.3, insertion point, epochs, folds, datasets unchanged.",
+ "rule": "Everything else in r5_train_plan stands. The end-to-end scoring rule, sealed before any R5 model is scored, also scores simulated thick-slice versions (5 mm, with and without a gap) of the held-out sets, per thickness, against charm on the original 1 mm scan.",
+ "no_folding": "not judged here (segmenter training only); the scoring rule states it."
+}

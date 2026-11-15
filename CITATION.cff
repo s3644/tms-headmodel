@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the preprint below, and the model record if you use the trained model."
+title: "tms-headmodel: TMS navigation head models from routine clinical MRI on the GPU"
+authors:
+  - family-names: Jitpimolmard
+    given-names: Jukrapope
+    orcid: "https://orcid.org/0009-0001-9170-426X"
+license: GPL-3.0-only
+repository-code: "https://github.com/s3644/tms-headmodel"
+version: "0.1.1"
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.24215664
+    description: "R5 trained model files (Zenodo, CC BY-NC 4.0)"
+preferred-citation:
+  type: article
+  title: "TMS targets in about a minute from routine clinical MRI: a GPU head-model route checked against SimNIBS charm on 1 mm and 5 mm scans"
+  authors:
+    - family-names: Jitpimolmard
+      given-names: Jukrapope
+      orcid: "https://orcid.org/0009-0001-9170-426X"
+  doi: 10.5281/zenodo.24215660
+  year: 2026
+  notes: "Preprint, Zenodo"

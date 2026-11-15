@@ -1,0 +1,7 @@
+{
+ "what": "Amendment 1 to p01_comparators (sha 017a3a66...), sealed 2026-11-12 after the pilot and before any test head was run by a comparator.",
+ "why": "Pilot (machinery check): all 10 charm jobs (C1, C2) stopped at charm's header check: the simulated thick-slice inputs and SynthSR's outputs have qform_code 0 and a valid sform (sform_code 2, equal to the image affine), and the rule's setting passed --forceqform. C3 ran (10/10).",
+ "change": "C1 and C2 call charm with --forcesform instead of --forceqform (head-model commit 5b49d79). Nothing else changes: tools, versions, inputs, metrics, analysis, order. The failed pilot jobs are kept under runs/p01_comparators/pilot_attempt1/ and the pilot is run again; C3's pilot results are reused unchanged.",
+ "rule": "Everything else in p01_comparators stands; the test set runs once, only after a pilot in which every job ran.",
+ "no_folding": "As p01_comparators: not judged."
+}

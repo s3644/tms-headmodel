@@ -1,0 +1,6 @@
+{
+ "what": "WP3 registration accuracy gate, EEG scope (PLAN.md section 8, decision 5). Accepted by the user 2026-10-29, sealed before round 4. Basis: no FDA-cleared rTMS protocol uses EEG 10-20 positions except Beam F3 (locator docs/TMS_PROTOCOLS.md).",
+ "rule": "From round 4 on, the EEG part of the WP3 gate (<= 2 mm mean over all cases and points, <= 5 mm worst single point, each against charm, with the same per-point metric and skin projection the gate used before) is judged on these 13 EEG10-10_UI_Jurak_2007 positions only: F3, F4, Fz, Fpz, Fp1, Fp2, Cz, C3, C4, FCz, T7, T8, Oz; and on the 4 charm fiducials Nz, Iz, LPA, RPA. The targets gate (<= 2 mm mean, <= 5 mm worst) is unchanged. The whole 80-position cap is still computed and reported (mean, worst, cases passing) but does not gate. This scope is never applied to rounds before round 4 to rescue them.",
+ "no_folding": "Unchanged and part of the gate: written-map min Jacobian > 0 in both MNI2Conform_nonl and Conform2MNI_nonl on every evaluated case.",
+ "gate_note": "Changes the EEG point set only, not the thresholds. Round-4 adoption rules (validation) and the gate (test set) both use this scope."
+}

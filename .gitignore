@@ -1,0 +1,25 @@
+# images, head models, weights and downloads never go into git (public data licences, size, PHI rules)
+data/
+runs/
+vendor/
+*.nii
+*.nii.gz
+*.mgz
+*.msh
+__pycache__/
+*.egg-info/
+.pytest_cache/
+nnunet/
+nnunet_smoke/
+*.npz
+*.pth
+*.pt
+*.onnx
+*.engine
+
+# model files unpacked from the Zenodo archive (r5-model.zip)
+RELEASE.json
+MODEL_CARD.md
+SHA256SUMS
+splits.json
+LICENSE-MODEL

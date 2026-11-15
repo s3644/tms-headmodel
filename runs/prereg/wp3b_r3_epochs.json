@@ -1,0 +1,8 @@
+{
+ "what": "WP3b round 3, epoch pilot (user rule 2026-10-28: pilot every ML training on the first 5 data to choose the number of epochs). Sealed before any round-3 training started.",
+ "runs": "scripts/train_warpnet_r3.sh: warp net trained from scratch with --w-tail 1 (tail_frac 0.1), otherwise task N's TrainConfig/NetConfig, cosine schedule over the run's own epochs, train = train minus validation cases (runs/wp3b/val_cases.json), template runs/wp3b/template_trainminusval. Pilots: 200 and 400 epochs (runs/wp3b/warpnet_r3/e200, e400).",
+ "score": "scripts/train_warpnet.py score: warpnet.validate() of each pilot's final checkpoint (last.pt, not best.pt) on the first 5 validation cases in sorted order (1BA085, 1BA091, 1BA100, 1BA111, 1BA141); score = (targets mean + EEG10-10 mean) / 2, subject mm, lower is better. Net grid, no harmonic fill (it changes points by < 1 mm). Never test cases.",
+ "rule": "gain = score_200 - score_400. gain < 0.03 mm: the 400-epoch pilot is the final model; 0.03 <= gain < 0.10: train 700 epochs; gain >= 0.10: train 1000 epochs. The final model is that run's last.pt.",
+ "no_folding": "Not part of this rule (it only picks the length); the adoption rule wp3b_r3_adopt requires no folding in the written maps.",
+ "caveat": "The 5 pilot cases are part of the 30 validation cases that the adoption rule uses, so the validation numbers are slightly optimistic; all 5 are SynthRAD centre A cases (the sorted order)."
+}

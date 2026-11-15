@@ -1,0 +1,8 @@
+{
+ "what": "WP3b round 3: rule for replacing the current registration defaults with the round-3 warp net. Sealed before any round-3 training started.",
+ "setting": "Final round-3 net (runs/wp3b/warpnet_r3/final -> e<N>/last.pt, N from rule wp3b_r3_epochs) + Params.net_fill=True (harmonic fill outside the training support) + SVF last stage only svf_stages=[[2,4,150]], svf_class_weights={'brain': 0}, w_init 0 (task N's best setting, chosen there on the same validation cases). Scored by scripts/eval_warpnet.py --rule wp3b_r3_adopt on the 30 validation cases (runs/wp3b/warpnet_r3/eval_val_last_b0).",
+ "baseline": "current defaults on the same 30 validation cases (runs/wp3b/warpnet/decision.json baseline): targets mean 1.6309 / max 5.0285; EEG on charm's skin mean 2.3795 / max 12.9384; fiducials on charm's skin max 9.8477.",
+ "rule": "Adopt (and then run it once on the 57 frozen test cases, then once on the OASIS-1 rescan set, counted as a second use) only if ALL hold: (1) targets mean <= 1.5809 (baseline - 0.05 mm); (2) EEG-on-charm's-skin mean <= 2.3295 (baseline - 0.05 mm); (3) no worst point worse than baseline by more than 1 mm: targets max <= 6.0285, EEG charm skin max <= 13.9384, fiducials charm skin max <= 10.8477; (4) no folding (below). Otherwise the defaults stay and the test set is not scored.",
+ "no_folding": "written-map min Jacobian > 0 in both MNI2Conform_nonl and Conform2MNI_nonl on every one of the 30 validation cases (eval_warpnet summary cases_no_fold == 30).",
+ "gate_note": "Adoption is not the WP3 gate (<= 2 mm mean, <= 5 mm worst): the gate is judged on the test run; the user decides any gate change."
+}
